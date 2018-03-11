@@ -8,16 +8,16 @@
         <form action="/test.php" method="get"> 
             跳马 <br><br><br>  棋盘坐标系：行为y轴，列为x轴<br>  
             棋盘行列说明：如3*4指   3行格子*4列格子，若理解为线条为4行线条*5列线条<br>   
-            输入数据说明：为了您使用体验，请勿输入过大数据，这里我们的限制为10*10 <br>    
+            输入数据说明：请勿输入过大数据，限制为15*15 <br>    
             <hr>棋盘设计: 
             <br>                       
-            棋盘行数:<input type="number" name="row" id="row"  min="0" max="10" />      
-            棋盘列数:<input type="number" name="column" id="column"  min="0" max="10"/>
+            棋盘行数:<input type="number" name="row" id="row"  min="0" max="15" />      
+            棋盘列数:<input type="number" name="column" id="column"  min="0" max="15"/>
             <br>                      
             <hr>原始起跳点: 
             <br>                       
-            起跳点所在行:<input type="number" name="fromRow" id="fromRow"  min="0" max="10" />  
-            起跳点所在列:<input type="number" name="fromColumn" id="fromColumn"  min="0" max="10"/>
+            起跳点所在行:<input type="number" name="fromRow" id="fromRow"  min="0" max="15" />  
+            起跳点所在列:<input type="number" name="fromColumn" id="fromColumn"  min="0" max="15"/>
             <br> 
             <input type="submit" value="确定" onclick="main()"/>
         </form>               
@@ -73,7 +73,7 @@
                    //记录位置                                
                    if (!Judgment(x1, y1,xy))
                    {  //返回false表示没有重复，可以继续寻找路径                                    
-                    //continue;                                   
+                                                       
                     path[step][0] = x1;                                    
                     path[step][1] = y1;                                                                      
                     if (t3 && t4)
@@ -86,15 +86,15 @@
                             if (i != step)                                                
                             document.write(" -> ");                                        
                             }
-                            //for(i)                                                                            
+                                                                                                       
                             document.write("<br>");                                    
-                        }//if(t3456)                                    
+                        }                                   
                     else{                                        
                         Jump(MAX_X, MAX_Y,x1, y1, step + 1,xy);                                     
-                        }//else                                
-                    }//if (!Judgment(x1, y1))                            
-                }//if(t1 && t2)                        
-            }//for(k)                    
+                        }                              
+                    }                           
+                }                       
+            }                  
         }                    
         function main(){                    
         //初始位置                                                          
