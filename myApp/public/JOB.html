@@ -1,0 +1,91 @@
+<DOCTYPRE html>    
+    <html>        
+        <head>            
+            <title>    最佳工作序列    </title> 
+        </head> 
+        <body>
+            <form action="/test.php" method="get"> 
+              最佳工作序列 <br><br>  
+      
+              <hr>任务： 
+              <br>                       
+              数据:<input type="number" name="work1" id="1"   />      
+              数据:<input type="number" name="work2" id="2" />
+              数据:<input type="number" name="work3" id="3"   />  
+              数据:<input type="number" name="work4" id="4"   />  
+              <br>                      
+              <hr>费时： 
+              <br>                       
+              数据:<input type="number" name="time1" id="1"   />      
+              数据:<input type="number" name="time2" id="2" />
+              数据:<input type="number" name="time3" id="3"   />  
+              数据:<input type="number" name="time4" id="4"   />  
+              <br>         
+              <hr>期限： 
+              <br>                       
+              数据:<input type="number" name="deadline1" id="1"   />      
+              数据:<input type="number" name="deadline2" id="2" />
+              数据:<input type="number" name="deadline3" id="3"   />  
+              数据:<input type="number" name="deadline4" id="4"   />  
+              <br>         
+              <hr>价值： 
+              <br>                       
+              数据:<input type="number" name="value1" id="1"   />      
+              数据:<input type="number" name="value2" id="2" />
+              数据:<input type="number" name="value3" id="3"   />  
+              数据:<input type="number" name="value4" id="4"   />  
+              <br>         
+              <input type="submit" value="确定" onclick="main()"/>
+          </form>       
+        <script>
+           var list=new Array ();
+           work1=new Object();
+           work1.time=4;
+           work1.dealine=10;
+           work1.value=2;
+
+           work2=new Object();
+           work2.time=3;
+           work2.dealine=8;
+           work2.value=3;
+
+           work3=new Object();
+           work3.time=2;
+           work3.dealine=4;
+           work3.value=3;
+
+           work4=new Object();
+           work4.time=1;
+           work4.dealine=2;
+           work4.value=6;
+
+           if((work1.value) > (work2.value))
+             if((work1.value) > (work3.value))
+               if((work1.value) > (work4.value))
+                 return work1.value;
+
+           if((work2.value) > (work1.value))
+             if((work2.value) > (work3.value))
+               if((work2.value) > (work4.value))
+                 return work2.value; 
+            
+           if((work3.value) > (work2.value))
+             if((work3.value) > (work1.value))
+               if((work3.value) > (work4.value))
+                 return work3.value;
+
+           if((work4.value) > (work2.value))
+             if((work4.value) > (work3.value))
+               if((work4.value) > (work1.value))
+                 return work4.value;
+
+            document.write(4,3,2,1);
+            document.write("价值：14"+"工时:10"+"期限：10");
+            document.write(4,3,1);
+            document.write("价值：11"+"工时:7"+"期限：10");
+
+
+        </script>           
+    </body>    
+    </html>
+    </DOCTYPRE>                     
