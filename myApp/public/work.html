@@ -5,19 +5,17 @@
     </head>
     <body>
         <script type="text/Javascript">
-        //设定原始数据
-        var jobNum = 4;
-        var job1 = { id:1, time:4, ddl:10, value:2};
-        var job2 = { id:2, time:3, ddl:8, value:3};
-        var job3 = { id:3, time:2, ddl:4, value:3};
-        var job4 = { id:4, time:1, ddl:2, value:6};
+        
+        var workNum = 4;
+        var work1 = { id:1, time:4, ddl:10, value:2};
+        var work2 = { id:2, time:3, ddl:8, value:3};
+        var work3 = { id:3, time:2, ddl:4, value:3};
+        var work4 = { id:4, time:1, ddl:2, value:6};
         var raw = { id:"任务", time:"时间", ddl:"最后完成期限", value:"价值"};
-        var allJob = new Array(job1, job2, job3, job4, raw);
+        var allwork = new Array(work1, work2, work3, work4, raw);
         createTable();   //绘制表格
-        jobSchedul();               //计算序列
-        ///
-        //绘制工作表格
-        ///
+        workSchedul();               //计算序列
+         
         function createTable() 
         { 
             var table = document.createElement("table"); 
@@ -52,9 +50,7 @@
             table.appendChild(tbody); 
             document.body.appendChild(table); 
         } 
-        ///
-        //计算最佳工作序列
-        ///
+         
         //设置排序方式
         function compProfit(a, b)
         {
@@ -70,35 +66,36 @@
             {
                 for( var j = i; j >= 0; j--)
                     if(slot[j] == false)    count++;
-                if(count >= day) return i;      //返回当前天数
+                if(count >= day) 
+                return i;     
                 count = 0;
             }
-            return 0;       //工作不能完成
+            return 0;       
         }
         //进行计算
-        function jobSchedul()
+        function workSchedul()
         {
             //对工作进行排序
-            allJob.sort(compProfit);
+            allwork.sort(compProfit);
             
             //找到最迟完成期限
             var mDdl = 0;
             for(var i = 0; i < jobNum ; i++)
-                if(allJob[i].ddl > mDdl)
+                if(allwork[i].ddl > mDdl)
                     mDdl = allJob[i].ddl;
             
-            var result = new Array(mDdl);       //记录完成顺序
-            var slot = new Array(mDdl);         //记录该天是否有工作
+            var result = new Array(mDdl);       
+            var slot = new Array(mDdl);        
             for ( var i = 0; i < mDdl; i++) slot[i] = false;
             
-            for ( var i = 0; i < jobNum; i++)   //对工作进行遍历
+            for ( var i = 0; i < jobNum; i++)   
             {
                 for(var j = allJob[i].ddl - 1; j >= 0; j--)
                 {
                     //在该工作的最迟期限上是否有其他工作
                     if(slot[j] == false)
                     {
-                        //查找工作的完成时间
+                        
                         //如果返回0表示工作不能完成
                         var max = FreeDay(slot, allJob[i].ddl, allJob[i].time);
                         if ( max == 0 && i != 0)  break;
