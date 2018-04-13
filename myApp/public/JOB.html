@@ -38,51 +38,113 @@
               <input type="submit" value="确定" onclick="main()"/>
           </form>       
         <script>
-           var list=new Array ();
-           work1=new Object();
-           work1.time=4;
-           work1.dealine=10;
-           work1.value=2;
+           var jobnum = 4;
+           var work1 = {id:1,time:4,ddl:10,value:2};
+           var work2 = {id:2,time:3,ddl:8,value:3};
+           var work3 = {id:3,time:2,ddl:4,value:3};
+           var work4 = {id:4,time:1,ddl:2,value:6};
+           var alljobs = new Array(work1,work2,work3,work4);
+           createTable();
+           jobSchedul();
 
-           work2=new Object();
-           work2.time=3;
-           work2.dealine=8;
-           work2.value=3;
-
-           work3=new Object();
-           work3.time=2;
-           work3.dealine=4;
-           work3.value=3;
-
-           work4=new Object();
-           work4.time=1;
-           work4.dealine=2;
-           work4.value=6;
-
-           if((work1.value) > (work2.value))
-             if((work1.value) > (work3.value))
-               if((work1.value) > (work4.value))
-                 return work1.value;
-
-           if((work2.value) > (work1.value))
-             if((work2.value) > (work3.value))
-               if((work2.value) > (work4.value))
-                 return work2.value; 
+           function createTable()
+           {
+             var table = document.createElement("table");
+             var body = document.createElement("body");
+             table.border = 1;
+            for(var i = 0; i <= 4; i++) 
+            { 
+                var tr = document.createElement("tr"); 
+                var td;
+                var n;
+                if ( i == 0)     n = 4;
+                else    n = i-1;
+                td = document.createElement("td");
+                td.innerHTML = allJob[n].id;
+                td.width = 90;
+                td.heigth = 30; 
+                tr.appendChild(td); 
+                td = document.createElement("td");
+                td.innerHTML = allJob[n].time;
+                td.width = 90;
+                tr.appendChild(td); 
+                td = document.createElement("td");
+                td.innerHTML = allJob[n].ddl;
+                td.width = 180;
+                tr.appendChild(td); 
+                td = document.createElement("td");
+                td.innerHTML = allJob[n].value;
+                td.width = 90;
+                tr.appendChild(td); 
+                tbody.appendChild(tr);    
+            } 
+            table.appendChild(body); 
+            document.body.appendChild(table); 
+           }
+           //设置排序方式
+        function compProfit(a, b)
+        {
+            return ((a.value/a.time) < (b.value/b.time));
+        }
+        //查找任务结束的天数
+        function FreeDay(slot, ddl, day)
+        {
+            var count = 0, n = 0;
+            for (;slot[n] == true; n++);
             
-           if((work3.value) > (work2.value))
-             if((work3.value) > (work1.value))
-               if((work3.value) > (work4.value))
-                 return work3.value;
-
-           if((work4.value) > (work2.value))
-             if((work4.value) > (work3.value))
-               if((work4.value) > (work1.value))
-                 return work4.value;
-
-            document.write(4,3,2,1);
-            document.write("价值：14"+"工时:10"+"期限：10");
-            document.write(4,3,1);
-            document.write("价值：11"+"工时:7"+"期限：10");
+            for ( var i = n; i < ddl; i++)
+            {
+                for( var j = i; j >= 0; j--)
+                    if(slot[j] == false)    count++;
+                if(count >= day) return i;      //返回当前天数
+                count = 0;
+            }
+            return 0;       //工作不能完成
+        }
+        //进行计算
+        function jobSchedul()
+        {
+            //对工作进行排序
+            allJob.sort(compProfit);
+            
+            //找到最迟完成期限
+            var mDdl = 0;
+            for(var i = 0; i < jobNum ; i++)
+                if(allJob[i].ddl > mDdl)
+                    mDdl = allJob[i].ddl;
+            
+            var result = new Array(mDdl);       //记录完成顺序
+            var slot = new Array(mDdl);         //记录该天是否有工作
+            for ( var i = 0; i < mDdl; i++) slot[i] = false;
+            
+            for ( var i = 0; i < jobNum; i++)   //对工作进行遍历
+            {
+                for(var j = allJob[i].ddl - 1; j >= 0; j--)
+                {
+                    //在该工作的最迟期限上是否有其他工作
+                    if(slot[j] == false)
+                    {
+                        //查找工作的完成时间
+                        //如果返回0表示工作不能完成
+                        var max = FreeDay(slot, allJob[i].ddl, allJob[i].time);
+                        if ( max == 0 && i != 0)  break;
+                        
+                        //记录本次工作用到的天
+                        for( var k = allJob[i].time; k > 0; k--)
+                            if(slot[max-k+1] == false)  slot[max-k+1] = true;
+                        
+                        //将工作记录到顺序中
+                        result[max] = allJob[i].id;
+                        break;
+                    }
+                }
+            }
+            //打印工作顺序表
+            document.write("本次工作顺序为：")
+            for (var i = 0; i < mDdl; i++)
+                if(result[i] >= 0)  document.write(result[i] + " " );
+        }
+           
 
 
         </script>           
