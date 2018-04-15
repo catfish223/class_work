@@ -29,20 +29,20 @@
                 if ( i == 0)     n = 4;
                 else    n = i-1;
                 td = document.createElement("td");
-                td.innerHTML = allJob[n].id;
+                td.innerHTML = allwork[n].id;
                 td.width = 90;
                 td.heigth = 30; 
                 tr.appendChild(td); 
                 td = document.createElement("td");
-                td.innerHTML = allJob[n].time;
+                td.innerHTML = allwork[n].time;
                 td.width = 90;
                 tr.appendChild(td); 
                 td = document.createElement("td");
-                td.innerHTML = allJob[n].ddl;
+                td.innerHTML = allwork[n].ddl;
                 td.width = 180;
                 tr.appendChild(td); 
                 td = document.createElement("td");
-                td.innerHTML = allJob[n].value;
+                td.innerHTML = allwork[n].value;
                 td.width = 90;
                 tr.appendChild(td); 
                 tbody.appendChild(tr);    
@@ -80,32 +80,32 @@
             
             //找到最迟完成期限
             var mDdl = 0;
-            for(var i = 0; i < jobNum ; i++)
+            for(var i = 0; i < workNum ; i++)
                 if(allwork[i].ddl > mDdl)
-                    mDdl = allJob[i].ddl;
+                    mDdl = allwork[i].ddl;
             
             var result = new Array(mDdl);       
             var slot = new Array(mDdl);        
             for ( var i = 0; i < mDdl; i++) slot[i] = false;
             
-            for ( var i = 0; i < jobNum; i++)   
+            for ( var i = 0; i < workNum; i++)   
             {
-                for(var j = allJob[i].ddl - 1; j >= 0; j--)
+                for(var j = allwork[i].ddl - 1; j >= 0; j--)
                 {
                     //在该工作的最迟期限上是否有其他工作
                     if(slot[j] == false)
                     {
                         
                         //如果返回0表示工作不能完成
-                        var max = FreeDay(slot, allJob[i].ddl, allJob[i].time);
+                        var max = FreeDay(slot, allwork[i].ddl, allwork[i].time);
                         if ( max == 0 && i != 0)  break;
                         
                         //记录本次工作用到的天
-                        for( var k = allJob[i].time; k > 0; k--)
+                        for( var k = allwork[i].time; k > 0; k--)
                             if(slot[max-k+1] == false)  slot[max-k+1] = true;
                         
                         //将工作记录到顺序中
-                        result[max] = allJob[i].id;
+                        result[max] = allwork[i].id;
                         break;
                     }
                 }
