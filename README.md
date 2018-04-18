@@ -1,3 +1,10 @@
 # class_work
-#helloworld  https://catfish223.github.io/class_work/myApp/public/helloworld
-#hellocanvas  https://catfish223.github.io/class_work/myApp/public/hellocanvas
+helloworld   https://catfish223.github.io/class_work/myApp/public/helloworld<br>
+hellocanvas  https://catfish223.github.io/class_work/myApp/public/hellocanvas<br>
+跳马问题      https://catfish223.github.io/class_work/myApp/public/horse<br>
+最佳工作序列  https://catfish223.github.io/class_work/myApp/public/work<br>
+空间对象几何特征编码  https://catfish223.github.io/class_work/myApp/public/write_name<br>
+空间平面坐标变换      https://catfish223.github.io/class_work/myApp/public/name_change<br>
+地图投影     https://catfish223.github.io/class_work/myApp/public/touying<br>
+多边形面积计算（反算） https://catfish223.github.io/class_work/myApp/public/touyingfansuan<br>
+道格拉斯-普克算法     https://catfish223.github.io/class_work/myApp/public/数据压缩<br>
