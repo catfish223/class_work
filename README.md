@@ -1,4 +1,4 @@
-# class_work
+# myApp
 helloworld   https://catfish223.github.io/class_work/myApp/public/helloworld<br>
 hellocanvas  https://catfish223.github.io/class_work/myApp/public/hellocanvas<br>
 跳马问题      https://catfish223.github.io/class_work/myApp/public/horse<br>
