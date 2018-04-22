@@ -1,0 +1,363 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>数据压缩</title>
+        <style type = "text/css">
+        body{ margin:0; font-family:"黑体"; font-size:14px; background:#A9E9E9;}
+        #container { margin:0 auto; margin-top:5px; width:1200px; padding:5px; background:#FFFFFF;}
+        #header { margin-bottom:10px; background:rgb(120, 121, 121);}
+        #conButton{visibility: hidden;}
+        .containCanvas{ margin:0 auto;background: rgb(180, 200, 150);}
+        </style>            
+    </head>
+    <body>
+        <div id = "container">
+            <div id = "header">
+                <input id = "openMapFile" type = "file" onchange = "readMapFile()"/>
+                <div id = "conButton">
+                    <input id = "comButton" type = "button" value = "数据压缩" onclick = "onComSign()"/>
+                </div>
+                <div id = "canvasDiv" class = "containCanvas">
+                    <canvas id = "mapDrawing"/>
+                </div>
+            </div>
+        </div>            
+        <script type = "text/Javascript">
+            /*全局变量*/
+            var dataCom = 0;                                //数据压缩标志，1为数据压缩
+            var myMap = new Array();                        //首位记录地图总线段数  
+            var rawMapDataSize = 0, newMapDataSize = 0;     //记录数据存储大小
+            //记录地图中存储的点的数量，用来表示数据量
+            function calDataSize(mapArray)
+            {
+                var dataSize = 0;
+                //除去网格的存储量，仅对地图的点进行计算
+                for (var i = mapArray[0][1] + 1; i <= mapArray[0][0]; i++)
+                    dataSize += mapArray[i].length;
+                return dataSize;
+            }
+            
+            //计算点到直线的距离
+            function lenPoint2Line(targetPoint, originPoint, terminusPoint)
+            {
+                //原始数据点坐标
+                var paX = targetPoint[0], paY = targetPoint[1];
+                var pbX = originPoint[0], pbY = originPoint[1];
+                var pcX = terminusPoint[0], pcY = terminusPoint[1];
+                //线段的长度
+                var L = Math.sqrt((pbX - pcX)*(pbX - pcX) + (pbY - pcY)*(pbY - pcY));
+                //计算判断点与线位置的参数
+                var r = ((pbY - paY)*(pbY - pcY) - (pbX - paX)*(pcX - pbX)) / (L*L);
+                //目标点在直线上投影点的位置
+                var px = pbX + r*(pcX - pbX), py = pbY + r*(pcY - pbY);
+                //点到投影点的距离
+                var distance = Math.sqrt((px - paX)*(px - paX) + (py - paY)*(py - paY));
+                return distance;
+            }
+            //查找数组中距离最大值的位置
+            function findLengthMax(point2lineArray)
+            {
+                var max = Number.NEGATIVE_INFINITY, pointLengthNum = point2lineArray.length;
+                var position = 0;           //记录当前最大值的位置
+                for (var i = 0; i < pointLengthNum; i++)
+                {
+                    if (point2lineArray[i] > max)
+                    {
+                        max = point2lineArray[i];
+                        position = i;
+                    }
+                }
+                return position;
+            }
+            //对单条线进行道格拉斯数据压缩算法处理，运用递归
+            function eachLineDouglasCom(pointArray, originPNum, terminusPNum, computeSign, newPointArray)
+            {   
+                //如果起止点之中点数小于一个点，结束递归
+                if ((terminusPNum - originPNum) < 2)    return newPointArray;
+                //初始化起止点数据
+                var originPoint = pointArray[originPNum], terminusPoint = pointArray[terminusPNum]
+                var targetPNum = terminusPNum - originPNum;     
+                var eachP2LDis = new Array(targetPNum);         
+                //将所有点到线的距离记录下来
+                for (var i = 1; i < targetPNum; i++)
+                    eachP2LDis[i - 1] = lenPoint2Line(pointArray[i + originPNum], originPoint, terminusPoint);
+                //查找点到线的最大距离的点，并返回其在数组中的位置
+                var maxLengthPointPosition = findLengthMax(eachP2LDis);
+                
+                //如果最大距离小于标识距离，递归结束
+                if (eachP2LDis[maxLengthPointPosition] < computeSign)   return newPointArray;
+                
+                //最大距离大于标识距离，将点存入数组并进行递归
+                var newterminusPNum = originPNum + maxLengthPointPosition + 1;
+                
+                newPointArray.splice(newPointArray.indexOf(originPoint) + 1, 0, pointArray[newterminusPNum]);
+                
+                //前后分别进行递归
+                eachLineDouglasCom(pointArray, originPNum, newterminusPNum, computeSign, newPointArray);
+                eachLineDouglasCom(pointArray, newterminusPNum, terminusPNum, computeSign, newPointArray);
+                return newPointArray;       
+            }
+            //对地图进行道格拉斯数据压缩算法处理
+            function mapDouglasCom(mapArray, computeSign)
+            {
+                var startLine = mapArray[0][1] + 1;      
+                for (var i = startLine; i <= mapArray[0][0]; i++)
+                {
+                    
+                    var lastPointNum = (mapArray[i][0] == mapArray[i][mapArray[i].length - 1])? 2: 1;
+                    var tempArray = new Array();
+                    tempArray[0] = mapArray[i][0], tempArray[1] = mapArray[i][mapArray[i].length - lastPointNum];
+                    //对线段进行压缩
+                    mapArray[i] = eachLineDouglasCom(mapArray[i], 0, mapArray[i].length - lastPointNum, computeSign, tempArray)
+                    
+                    if (lastPointNum == 2)
+                        mapArray[i][mapArray[i].length] = mapArray[i][0];
+                }
+                return mapArray;
+            }
+            
+            //进行兰伯特投影转换
+            function LambertTransition(mapDraw)
+            {
+                //投影转化算法
+                function LambertTXY(B, L, B0, B1, B2, L0, a, b, e2)
+                {
+                    //将角度制转为弧度制
+                    function An2Ra(angle) 
+                    { 
+                        return (angle / 180) * Math.PI; 
+                    }
+	                //将原始参数转变为弧度制
+	                B0 = An2Ra(B0);
+	                B1 = An2Ra(B1);
+	                B2 = An2Ra(B2);
+	                L0 = An2Ra(L0);
+	                //将原始数据转化为弧度制
+	                B = An2Ra(B);
+	                L = An2Ra(L);
+                    
+    	            //获得B1B2的m值
+	                var mB1 = Math.cos(B1) / Math.sqrt(1 - e2*Math.sin(B1)*Math.sin(B1));
+	                var mB2 = Math.cos(B2) / Math.sqrt(1 - e2*Math.sin(B2)*Math.sin(B2));
+	                //获得B0B1B2的t值
+	                var tB0 = Math.tan(Math.PI/4 - B0/2) / Math.sqrt((1 - Math.sqrt(e2)*Math.sin(B0)) / ((1 + Math.sqrt(e2)*Math.sin(B0)), Math.sqrt(e2)/2));
+    	            var tB1 = Math.tan(Math.PI/4 - B1/2) / Math.sqrt((1 - Math.sqrt(e2)*Math.sin(B1)) / ((1 + Math.sqrt(e2)*Math.sin(B1)), Math.sqrt(e2)/2));
+	                var tB2 = Math.tan(Math.PI/4 - B2/2) / Math.sqrt((1 - Math.sqrt(e2)*Math.sin(B2)) / ((1 + Math.sqrt(e2)*Math.sin(B2)), Math.sqrt(e2)/2));
+	                //获得n值
+	                var n = Math.log(mB1/mB2) / Math.log(tB1/tB2);
+	                //获得F值
+    	            var F = mB1 / (n * Math.pow(tB1, n));		
+	                //获得r0
+	                var r0 = a * F * Math.pow(tB0, n);
+                	//获得theTa值
+	                var theTa = n * (L - L0);
+                    
+	                //获得B的t值
+	                var tB = Math.tan(Math.PI/4 - B/2) / Math.sqrt((1 - Math.sqrt(e2)*Math.sin(B)) / ((1 + Math.sqrt(e2)*Math.sin(B)), Math.sqrt(e2)/2));
+            	    //获得r值
+	                var r = a * F * Math.pow(tB, n); 
+                    
+	                //计算坐标
+	                var XL = r * Math.sin(theTa);	//经度
+	                var YB = r0 - r * Math.cos(theTa);	//纬度
+            	    var XY = new Array(XL, YB);
+	                return XY;
+                }
+                var GC = { a:6378245, b: 6356863.01877, e2:0.006693421622966, e_2:0.006738525414684};
+                for (var i = 1; i <= mapDraw[0][0]; i++)
+                {
+                    var eachLine = mapDraw[i];
+                    for (var j = 0; j < eachLine.length; j++)
+                        eachLine[j] = LambertTXY(eachLine[j][1], eachLine[j][0], 0, 20, 40, 105, GC.a, GC.b, GC.e2)
+                }
+                return mapDraw;
+            }
+            //找到地图的起始边界，并将地图上下左右边界以数组形式记录并传出
+            function findBorder(mapArray)
+            {
+                //设置初始最大最小坐标为无限小无限大
+                var maxX = Number.NEGATIVE_INFINITY, maxY = Number.NEGATIVE_INFINITY;
+                var minX = Number.POSITIVE_INFINITY, minY = Number.POSITIVE_INFINITY; 
+                var lineNum = mapArray.length;              
+                var lineArray, pointNum, corX, corY;        
+                //遍历所有线段所有点找到最大最小值
+                for (var i = 1; i < lineNum; i++)
+                {
+                    lineArray = mapArray[i];                
+                    pointNum = lineArray.length;           
+                    for (var j = 0; j < pointNum; j++)
+                    {
+                        corX = lineArray[j][0], corY = lineArray[j][1];
+                        minX = (corX < minX) ? corX: minX;
+                        maxX = (corX > maxX) ? corX: maxX;
+                        minY = (corY < minY) ? corY: minY;
+                        maxY = (corY > maxY) ? corY: maxY;
+                    }//for point j
+                }//for line i
+                
+                return Array(minX, maxX, minY, maxY);
+            }
+            
+            function completeMap(mapArray)
+            {
+                var mapDraw = new Array();                  
+                var borderList = findBorder(mapArray);     
+                //以五度为间隔，建立网格并记录边界
+                var leftBorder = parseInt(borderList[0]/5) - (borderList[0] < 0 ? 1: 0);
+                var rightBorder = parseInt(borderList[1]/5) + (borderList[1] < 0 ? 0: 1);
+                var bottomBorder = parseInt(borderList[2]/5) - (borderList[2] < 0 ? 1: 0);
+                var topBorder = parseInt(borderList[3]/5) + (borderList[3] < 0 ? 0: 1);
+                var longLineNum = rightBorder - leftBorder -1, latLineNum = topBorder - bottomBorder - 1;
+                //经纬线长度
+                var longLineLen = (latLineNum + 1) * 5, latLineLen = (longLineNum + 1) * 5;
+               
+                for (var i = 1; i <= longLineNum; i++)
+                {
+                    mapDraw[i] = new Array(2);
+                    mapDraw[i][0] = new Array((leftBorder + i)*5, bottomBorder*5);
+                    mapDraw[i][1] = new Array((leftBorder + i)*5, bottomBorder*5 + longLineLen);
+                }
+               
+                for (var i = 1; i <= latLineNum; i++)
+                {
+                    mapDraw[i + longLineNum] = new Array(longLineNum);
+                    for (var j = 0; j < longLineNum + 2; j++)
+                    {                        
+                        mapDraw[i + longLineNum][j] = new Array(leftBorder*5 + 5*j, (bottomBorder + i)*5);
+                    }
+                }
+               
+                var mapLineNum = mapArray[0];               
+                for (var i = 1; i <= mapLineNum; i++)
+                {
+                    mapDraw[i +longLineNum + latLineNum] = new Array();
+                    mapDraw[i + longLineNum + latLineNum] = mapArray[i].slice();
+                }
+                
+                //记录用于所有线总数，画网格的线条数，地图线段数
+                mapDraw[0] = new Array(mapDraw.length - 1, longLineNum + latLineNum, mapArray[0]) ; 
+                
+                //进行兰伯特投影
+                mapDraw = LambertTransition(mapDraw);
+                if (dataCom)
+                    mapDraw = mapDouglasCom(mapDraw, 1000);
+                
+                if (dataCom)
+                    newMapDataSize = calDataSize(mapDraw);
+                else
+                    rawMapDataSize = calDataSize(mapDraw);
+                
+                return mapDraw;
+            }
+            //绘制地图
+            function drawMap(mapArray)
+            {
+                var rawDrawPoints = completeMap(mapArray);
+                //获得画布的长宽定标
+                var mapDrawBorder = findBorder(rawDrawPoints);
+                var W2HRatio = (mapDrawBorder[1] - mapDrawBorder[0]) / (mapDrawBorder[3] - mapDrawBorder[2]);
+                var interval, minX = mapDrawBorder[0], maxX = mapDrawBorder[1], minY = mapDrawBorder[2] ,maxY = mapDrawBorder[3];
+                //设置缩放比例，使地图在屏幕中央显示并大小合适
+                if (W2HRatio >= 1.5)    interval = 900/(mapDrawBorder[1] - mapDrawBorder[0]);
+                else    interval = 600/(mapDrawBorder[3] - mapDrawBorder[2]);
+                var mapWidth = interval * (mapDrawBorder[1] - mapDrawBorder[0]);
+                var mapHeight = interval * (mapDrawBorder[3] - mapDrawBorder[2]);
+                
+                var mapDrawDiv = document.getElementById("canvasDiv");
+                mapDrawDiv.style.height = mapHeight + "px";
+                mapDrawDiv.style.width = mapWidth + "px";
+                var myCanvas = document.getElementById("mapDrawing");
+                myCanvas.width = mapWidth;
+                myCanvas.height = mapHeight;
+                //绘制
+                var drawCanvas = myCanvas.getContext("2d");
+                drawCanvas.lineWidth = 0.5;                        
+                drawCanvas.strokeStyle = "gray";                    
+                //依次绘制每一条线
+                for (var i = 1; i <= rawDrawPoints[0][0]; i++)
+                {
+                    if (i == rawDrawPoints[0][1] + 1)
+                    {//网格绘制完毕，开始绘制地图
+                        drawCanvas.lineWidth = 1.3;                           
+                        drawCanvas.strokeStyle = "purple";                   
+                    }
+                    var lineList = rawDrawPoints[i];
+                    drawCanvas.beginPath();
+                    drawCanvas.moveTo((lineList[0][0] - minX) * interval, (maxY - lineList[0][1]) * interval);
+                    for (var j = 1; j < lineList.length; j++)
+                        drawCanvas.lineTo((lineList[j][0]- minX) * interval, (maxY - lineList[j][1]) * interval);
+                    drawCanvas.stroke();                               
+                }
+                
+               
+                if (!dataCom)   return;
+                drawCanvas.strokeStyle = "black";                   
+                drawCanvas.font = "16px 黑体";
+                
+                drawCanvas.fillText("压缩率", 20, 30);
+                drawCanvas.fillText(((newMapDataSize/rawMapDataSize)*100).toFixed(2) + "%", 20, 50);
+                return;
+            }
+            
+            //按下数据压缩按钮，对数据进行压缩标识进行改动
+            function onComSign() 
+            { 
+                dataCom = 1; 
+                drawMap(myMap);
+            }
+           
+            function addComButtom()
+            {
+                document.getElementById("conButton").style.visibility = "visible";
+            }
+            
+            function mapStr2mapXY(mapStr)
+            {
+                var lineNum = 1;        //记录已经读取行数
+                var pointNum = 0;       //记录当前线点数
+                var mapXY = new Array();  
+                var strs = mapStr.split("\n");     //设置分割
+                for (var i = 0; i < strs.length ;i++)
+                {
+                    if( i == 0)   
+                    {
+                        mapXY[lineNum] = new Array();
+                        i++;
+                    }
+                    if(strs[i].indexOf("END") >= 0)
+                    {
+                        if(strs[i+1].indexOf("END") >= 0)    
+                        {
+                            mapXY[0] = lineNum;
+                            return mapXY;
+                        }
+                        else                               
+                        {
+                            mapXY[++lineNum] = new Array(); //为下一条线分配空间
+                            i += 2;
+                            pointNum = 0;
+                        }
+                    }
+                    //将该点记录进入数组
+                    var XY = strs[i].split(',');
+                    mapXY[lineNum][pointNum] = new Array(2);       
+                    mapXY[lineNum][pointNum][0] = parseFloat(XY[0]);
+                    mapXY[lineNum][pointNum++][1] = parseFloat(XY[1]);
+                }//for
+            }
+            //通过按钮读取文件并绘制
+            function readMapFile()
+            {  
+                addComButtom();              
+                var mapFile = document.getElementById("openMapFile").files[0];  
+                var reader = new FileReader();
+                reader.readAsText(mapFile);  
+                reader.onload=function(e)
+                {
+                    myMap = mapStr2mapXY(this.result)   
+                    drawMap(myMap);                     //绘制原始地图
+                }     
+            }
+        </script>
+    </body>
+</html>>
