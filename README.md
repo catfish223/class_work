@@ -9,3 +9,4 @@ hellocanvas  https://catfish223.github.io/class_work/myApp/public/hellocanvas<b
 多边形面积计算（反算） https://catfish223.github.io/class_work/myApp/public/touyingfansuan<br>
 道格拉斯-普克算法     https://catfish223.github.io/class_work/myApp/public/数据压缩<br>
 拓扑生成   https://catfish223.github.io/class_work/myApp/public/拓扑生成<br>
+地图符号   https://catfish223.github.io/class_work/myApp/public/地图符号<br>
