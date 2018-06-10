@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>¶à±ßĞÎÍØÆËÉú³É</title>
+        <title>å¤šè¾¹å½¢æ‹“æ‰‘ç”Ÿæˆ</title>
         <style type = "text/css">
             #container{margin:0 auto; width:1200px;}
             #selectFrame {margin:0 auto; padding:10px; border-style:solid; border-width:2px; border-color:#000; width:450px}
@@ -12,16 +12,16 @@
     <body>
         <div id = "container">
             <div id = "selectFrame">
-                Ñ¡ÔñÎÄ¼ş<input id = "openMapFile" type = "file" onchange = "readMapFile()"/><br>
+                é€‰æ‹©æ–‡ä»¶<input id = "openMapFile" type = "file" onchange = "readMapFile()"/><br>
             </div>
         </div>
        
         <script type = "text/Javascript">
-         //»æÖÆËã·¨
-         //¶à±ßĞÎÊı×é´ÓµÚÒ»Î»¿ªÊ¼´æ´¢
-         //µãÊı×é´ÓµÚ0Î»¿ªÊ¼´æ´¢
-         //Æ½ĞĞÏßÌî³ä£¬½Ç¶ÈÓÃĞ±ÂÊ±íÊ¾£¬Æ½ĞĞÏßµÄ¼ä¸ôÓÃÏß¶ÎÖ®¼äµÄ¾àÀë±íÊ¾
-         //²âÊÔ¶à±ßĞÎ
+         //ç»˜åˆ¶ç®—æ³•
+         //å¤šè¾¹å½¢æ•°ç»„ä»ç¬¬ä¸€ä½å¼€å§‹å­˜å‚¨
+         //ç‚¹æ•°ç»„ä»ç¬¬0ä½å¼€å§‹å­˜å‚¨
+         //å¹³è¡Œçº¿å¡«å……ï¼Œè§’åº¦ç”¨æ–œç‡è¡¨ç¤ºï¼Œå¹³è¡Œçº¿çš„é—´éš”ç”¨çº¿æ®µä¹‹é—´çš„è·ç¦»è¡¨ç¤º
+         //æµ‹è¯•å¤šè¾¹å½¢
 function setPoly()
 {
     var poly = new Array();
@@ -38,24 +38,24 @@ function setPoly()
 
 
 /****************************************
- * È«¾Ö±äÁ¿
- * ¼ÇÂ¼µ±Ç°ÊäÈëµÄËùÓĞ¶à±ßĞÎÊı¾İºÍÊı¾İ·¶Î§
+ * å…¨å±€å˜é‡
+ * è®°å½•å½“å‰è¾“å…¥çš„æ‰€æœ‰å¤šè¾¹å½¢æ•°æ®å’Œæ•°æ®èŒƒå›´
  ****************************************/
-var polyArray = new Array();    //´æ´¢µØÍ¼Í¼²ãµÄÊı×é
-var layerNum = 0;               //¼ÇÂ¼µ±Ç°Í¼²ãÊı£¬ºÍ»æÖÆÎÆÀí±êÖ¾
-var WAL = new Array(4);         //¼ÇÂ¼µ±Ç°µØÍ¼»æÖÆµÄ·¶Î§minx,miny,width,height
+var polyArray = new Array();    //å­˜å‚¨åœ°å›¾å›¾å±‚çš„æ•°ç»„
+var layerNum = 0;               //è®°å½•å½“å‰å›¾å±‚æ•°ï¼Œå’Œç»˜åˆ¶çº¹ç†æ ‡å¿—
+var WAL = new Array(4);         //è®°å½•å½“å‰åœ°å›¾ç»˜åˆ¶çš„èŒƒå›´minx,miny,width,height
 
 /****************************************************
- * ¸ù¾İ»æÖÆµÄ½Ç¶È£¬»æÖÆµÄ¼ä¸ô£¬È·¶¨Í¼Ïñ»òÏßÌõÒª»æÖÆµÄÎ»ÖÃ
- * ½«Òª»æÖÆµÄÂ·¾¶Óë¶à±ßĞÎÊı×é´æ´¢µ½Ò»Æğ
+ * æ ¹æ®ç»˜åˆ¶çš„è§’åº¦ï¼Œç»˜åˆ¶çš„é—´éš”ï¼Œç¡®å®šå›¾åƒæˆ–çº¿æ¡è¦ç»˜åˆ¶çš„ä½ç½®
+ * å°†è¦ç»˜åˆ¶çš„è·¯å¾„ä¸å¤šè¾¹å½¢æ•°ç»„å­˜å‚¨åˆ°ä¸€èµ·
  *****************************************************/
-//ÇóËãµ±Ç°¶à±ßĞÎµÄ×îĞ¡Íâ½Ó¾ØĞÎ
+//æ±‚ç®—å½“å‰å¤šè¾¹å½¢çš„æœ€å°å¤–æ¥çŸ©å½¢
 function findAreaBorder(points)
 {
-    //ÉèÖÃºáÊúÖá×î´ó×îĞ¡±êÖ¾£¬ÒÔÄ«¿¨ÍĞÍ¶Ó°µÄ×î´ó×îĞ¡ÖµÎª±êÖ¾
+    //è®¾ç½®æ¨ªç«–è½´æœ€å¤§æœ€å°æ ‡å¿—ï¼Œä»¥å¢¨å¡æ‰˜æŠ•å½±çš„æœ€å¤§æœ€å°å€¼ä¸ºæ ‡å¿—
     var maxX = -Infinity, maxY = -Infinity, minX = Infinity, minY = Infinity; 
     var pointNum = points.length;
-    var corX, corY;             //µ±Ç°X£¬Y
+    var corX, corY;             //å½“å‰Xï¼ŒY
     for (var i = 0; i < pointNum; i++)
     {
         corX = points[i][0], corY = points[i][1];
@@ -68,112 +68,112 @@ function findAreaBorder(points)
     return [minX, maxX, minY, maxY];
 }
 
-//»ñÈ¡Ã¿¸ö¾ØĞÎÖĞÃ¿ÌõÆ½ĞĞÏß¾­¹ıµÄ¶¨µã
+//è·å–æ¯ä¸ªçŸ©å½¢ä¸­æ¯æ¡å¹³è¡Œçº¿ç»è¿‡çš„å®šç‚¹
 function acLines(bRectangle, interval, angle)
 {
-    var xLen = (bRectangle[3] - bRectangle[2]) / angle;         //»ñµÃºáÏòÏßÑØÉìµÄ³¤¶È
-    var borInterval = interval / Math.sin(Math.atan(angle));    //»ñµÃÔÚºáÏòÉÏµÄ¼ä¸ô¾àÀë
-    var lineNum = parseInt((xLen + bRectangle[1] - bRectangle[0] )/ borInterval) + 1;                           //Ö±ÏßÌõÊı
-    var start = angle < 0? bRectangle[0] - xLen: bRectangle[0]; //»ñµÃÖ±Ïß»æÖÆµÄÆğµãÎ»ÖÃ
+    var xLen = (bRectangle[3] - bRectangle[2]) / angle;         //è·å¾—æ¨ªå‘çº¿æ²¿ä¼¸çš„é•¿åº¦
+    var borInterval = interval / Math.sin(Math.atan(angle));    //è·å¾—åœ¨æ¨ªå‘ä¸Šçš„é—´éš”è·ç¦»
+    var lineNum = parseInt((xLen + bRectangle[1] - bRectangle[0] )/ borInterval) + 1;                           //ç›´çº¿æ¡æ•°
+    var start = angle < 0? bRectangle[0] - xLen: bRectangle[0]; //è·å¾—ç›´çº¿ç»˜åˆ¶çš„èµ·ç‚¹ä½ç½®
     
     var pOnLine = new Array();
-    //ÒÀ´ÎÑ¹ÈëÖ±Ïß
+    //ä¾æ¬¡å‹å…¥ç›´çº¿
     for (var i = 1; i <= lineNum; i++)
         pOnLine.push([bRectangle[0] + i*borInterval, bRectangle[3]])
     
     return pOnLine;
 }
 
-//ÇóËãµãµ½Ö±ÏßµÄ¾àÀë£¬´ø·ûºÅ
-//Ö±Ïß±íÊ¾Îª[Ğ±ÂÊ£¬¾­¹ıµÄµã]
+//æ±‚ç®—ç‚¹åˆ°ç›´çº¿çš„è·ç¦»ï¼Œå¸¦ç¬¦å·
+//ç›´çº¿è¡¨ç¤ºä¸º[æ–œç‡ï¼Œç»è¿‡çš„ç‚¹]
 function countP2L(point, line)
 {
-    //µÃµ½Ö±Ïß²ÎÊı
+    //å¾—åˆ°ç›´çº¿å‚æ•°
     var k = line[0], b = -line[1][0]*k + line[1][1];
-    //ÅĞ¶ÏµãÔÚÖ±ÏßµÄ·½Î»
+    //åˆ¤æ–­ç‚¹åœ¨ç›´çº¿çš„æ–¹ä½
     var pos = (k*point[0] - point[1] + b) < 0? -1: 1;
-    //ÇóËãµãµ½Ö±ÏßµÄ¾àÀë
+    //æ±‚ç®—ç‚¹åˆ°ç›´çº¿çš„è·ç¦»
     return (k*point[0] - point[1] + b)/ Math.sqrt(k*k + 1);
 
 }
 
-//ÅĞ¶ÏÏßÓëÏßµÄ¹ØÏµ£¬Èç¹û²»Ïà½»·µ»Øfalse£¬Ïà½»·µ»Ø½»µãÎ»ÖÃ
-//line1ÊÇÎÆÀíµÄÖ±Ïß·½³Ì£¬[Ğ±ÂÊ£¬¾­¹ıµÄµã×ø±ê]
-//line2ÊÇ¶à±ßĞÎÖĞµÄÏß¶Î£¬[point1, point2]
+//åˆ¤æ–­çº¿ä¸çº¿çš„å…³ç³»ï¼Œå¦‚æœä¸ç›¸äº¤è¿”å›falseï¼Œç›¸äº¤è¿”å›äº¤ç‚¹ä½ç½®
+//line1æ˜¯çº¹ç†çš„ç›´çº¿æ–¹ç¨‹ï¼Œ[æ–œç‡ï¼Œç»è¿‡çš„ç‚¹åæ ‡]
+//line2æ˜¯å¤šè¾¹å½¢ä¸­çš„çº¿æ®µï¼Œ[point1, point2]
 function judgeL2L(line1, line2)
 {
-    //»ñµÃÖ±Ïß²ÎÊıºÍµãµ½Ö±ÏßµÄ¾àÀë
+    //è·å¾—ç›´çº¿å‚æ•°å’Œç‚¹åˆ°ç›´çº¿çš„è·ç¦»
     var k = line1[0], b = -line1[1][0]*k + line1[1][1];
     var d1 = (k*line2[0][0] - line2[0][1] + b)/ Math.sqrt(k*k + 1);
     var d2 = (k*line2[1][0] - line2[1][1] + b)/ Math.sqrt(k*k + 1);
 
-    if (d1*d2 > 0)  return false;   //²»Ïà½»£¬Ö±½Ó·µ»Ø
-    var lScale = Math.abs(d1)/(Math.abs(d1) + Math.abs(d2));    //ÇóËãÏß¶ÎµÄ±ÈÀı
-    //·µ»Ø½»µã×ø±ê
+    if (d1*d2 > 0)  return false;   //ä¸ç›¸äº¤ï¼Œç›´æ¥è¿”å›
+    var lScale = Math.abs(d1)/(Math.abs(d1) + Math.abs(d2));    //æ±‚ç®—çº¿æ®µçš„æ¯”ä¾‹
+    //è¿”å›äº¤ç‚¹åæ ‡
     return [line2[0][0] - lScale * (line2[0][0] - line2[1][0]), line2[0][1] - lScale * (line2[0][1] - line2[1][1])];
 }
 
-//ÅĞ¶ÏÒ»¸öµãÊÇ·ñÔÚ¶à±ßĞÎÖĞ
+//åˆ¤æ–­ä¸€ä¸ªç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢ä¸­
 function judgePinA(point, poly)
 {
-    var nCross = 0;         //¼ÇÂ¼µ±ÉäÏßµÄÓÚ¶à±ßĞÎµÄ½»µãÊı
+    var nCross = 0;         //è®°å½•å½“å°„çº¿çš„äºå¤šè¾¹å½¢çš„äº¤ç‚¹æ•°
     var pointNum = poly.length - 1;
 
-    //Í¨¹ıË®Æ½ÉäÏß£¬±éÀú¶à±ßĞÎÃ¿Ò»¸öµã
+    //é€šè¿‡æ°´å¹³å°„çº¿ï¼Œéå†å¤šè¾¹å½¢æ¯ä¸€ä¸ªç‚¹
     for (var i = 0; i < pointNum; i++)
     {
-        //¼ÇÂ¼Ç°ºóÁ½¸öµã
+        //è®°å½•å‰åä¸¤ä¸ªç‚¹
         var fPoint = poly[i], nPoint = poly[i + 1];
-        //ÏßÊÇË®Æ½µÄ£¬Ìø¹ı
+        //çº¿æ˜¯æ°´å¹³çš„ï¼Œè·³è¿‡
         if (fPoint[1] == nPoint[1])
             continue;
-        //Èç¹ûµãÔÚÏß¶ÎµÄÉÏ·½»òÏÂ·½£¬Ìø¹ı
+        //å¦‚æœç‚¹åœ¨çº¿æ®µçš„ä¸Šæ–¹æˆ–ä¸‹æ–¹ï¼Œè·³è¿‡
         if (point[1] < (fPoint[1]<nPoint[1]? fPoint[1]: nPoint[1]))
             continue;
         if (point[1] > (fPoint[1]>nPoint[1]? fPoint[1]: nPoint[1]))
             continue;
-        //ÅĞ¶ÏºáÏòÊÇ·ñÓÚÏß¶ÎÏà½»
+        //åˆ¤æ–­æ¨ªå‘æ˜¯å¦äºçº¿æ®µç›¸äº¤
         var a = (parseFloat(point[1]-fPoint[1]) * parseFloat(nPoint[0]-fPoint[0])) / parseFloat(nPoint[1]-fPoint[1]) + fPoint[0];
         if (a  < point[0])
-            //ÅĞ¶ÏÓëÇ°µÄÏßÊÇ²»ÊÇË®Æ½µÄ£¬Èç¹ûÊÇË®Æ½±íÃ÷Óë¶ËµãÏà½»£¬Ö»ÄÜËãÒ»´Î
+            //åˆ¤æ–­ä¸å‰çš„çº¿æ˜¯ä¸æ˜¯æ°´å¹³çš„ï¼Œå¦‚æœæ˜¯æ°´å¹³è¡¨æ˜ä¸ç«¯ç‚¹ç›¸äº¤ï¼Œåªèƒ½ç®—ä¸€æ¬¡
             if (point[1] != fPoint[1])
                 nCross++;
     }
-    //Í¨¹ıÏà½»´ÎÊıÅĞ¶ÏÊÇ·ñÔÚÄÚ
+    //é€šè¿‡ç›¸äº¤æ¬¡æ•°åˆ¤æ–­æ˜¯å¦åœ¨å†…
     if (nCross % 2 == 1)
         return true;
     else
         return false; 
 }
 
-//ÒÔx×ø±êÎª±êÖ¾£¬´ÓĞ¡µ½´óµÄÅÅĞò¹æÔò
+//ä»¥xåæ ‡ä¸ºæ ‡å¿—ï¼Œä»å°åˆ°å¤§çš„æ’åºè§„åˆ™
 function com(a, b) 
 { 
     return a[0] > b[0];
 }
-//¼ÆËãÏßºÍ¶à±ßĞÎµÄ½»µã¸öÊı£¬²¢¼ÇÂ¼
-//¶à±ßĞÎÓÉµã¼¯×é³É£¬Ïß[Ğ±ÂÊ£¬¾­¹ıµÄµã×ø±ê]
+//è®¡ç®—çº¿å’Œå¤šè¾¹å½¢çš„äº¤ç‚¹ä¸ªæ•°ï¼Œå¹¶è®°å½•
+//å¤šè¾¹å½¢ç”±ç‚¹é›†ç»„æˆï¼Œçº¿[æ–œç‡ï¼Œç»è¿‡çš„ç‚¹åæ ‡]
 function judgeL2A(poly, line)
 {
     var pointNum = poly.length - 1;
-    var node = new Array();         //¼ÇÂ¼½»µãÊı×é
+    var node = new Array();         //è®°å½•äº¤ç‚¹æ•°ç»„
 
     for(var i = 0; i < pointNum; i++)
     {
         var tempPoint = judgeL2L(line, [poly[i], poly[i+1]]);
-        if (tempPoint == false) continue;       //Ã»ÓĞ½»µã
-        //ÅĞ¶ÏÊÇ²»ÊÇÏß¶Î¶Ëµã¼ÆËãÁËÁ½´Î£¬Èç¹û²»ÊÇ£¬¼ÇÂ¼¸Ãµã
+        if (tempPoint == false) continue;       //æ²¡æœ‰äº¤ç‚¹
+        //åˆ¤æ–­æ˜¯ä¸æ˜¯çº¿æ®µç«¯ç‚¹è®¡ç®—äº†ä¸¤æ¬¡ï¼Œå¦‚æœä¸æ˜¯ï¼Œè®°å½•è¯¥ç‚¹
         if (node.length == 0)
             node.push(tempPoint);
         else if (node[node.length -1][0] != poly[i][0] || node[node.length -1][1] != poly[i][1])
             node.push(tempPoint);
     }
 
-    //Èç¹ûÖ±ÏßÓë¶à±ßĞÎÃ»ÓĞ½»µã
+    //å¦‚æœç›´çº¿ä¸å¤šè¾¹å½¢æ²¡æœ‰äº¤ç‚¹
     if (node.length == 0)   return false;
-    //Í¨¹ıºá×ø±ê½øĞĞÅÅĞò
+    //é€šè¿‡æ¨ªåæ ‡è¿›è¡Œæ’åº
     node.sort(com);
-    //Í¨¹ıÖÕµãÅĞ¶ÏÏß¶ÎÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿£¬Èç¹ûÊÇ£¬ÒÔÏß¶ÎĞÎÊ½¼ÆÈëÊı×é
+    //é€šè¿‡ç»ˆç‚¹åˆ¤æ–­çº¿æ®µæ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨ï¼Œå¦‚æœæ˜¯ï¼Œä»¥çº¿æ®µå½¢å¼è®¡å…¥æ•°ç»„
     var result = new Array();
     for (var i = 0; i < node.length - 1; i++)
     {
@@ -185,15 +185,15 @@ function judgeL2A(poly, line)
     return result;
 }
 
-//ÇóËãÒ»¸ö¶à±ßĞÎÖĞµÄËùÓĞÆ½ĞĞÏß
+//æ±‚ç®—ä¸€ä¸ªå¤šè¾¹å½¢ä¸­çš„æ‰€æœ‰å¹³è¡Œçº¿
 function eachVena(poly, lineData)
 {
-    //ÇóËãËùÓĞÎÆÀíµÄÖ±Ïß·½³Ì
+    //æ±‚ç®—æ‰€æœ‰çº¹ç†çš„ç›´çº¿æ–¹ç¨‹
     var lines = acLines(findAreaBorder(poly), lineData.interval, lineData.angle);
     var lineNum = lines.length;
-    var areaLines = new Array();        //¼ÇÂ¼¶à±ßĞÎµÄËùÓĞÎÆÀíÏß¶Î
+    var areaLines = new Array();        //è®°å½•å¤šè¾¹å½¢çš„æ‰€æœ‰çº¹ç†çº¿æ®µ
 
-    //±éÀúËùÓĞÖ±Ïß£¬ÇóÔÚ¶à±ßĞÎÄÚ²¿µÄÏß¶Î×ø±ê
+    //éå†æ‰€æœ‰ç›´çº¿ï¼Œæ±‚åœ¨å¤šè¾¹å½¢å†…éƒ¨çš„çº¿æ®µåæ ‡
     for (var i = 0; i < lineNum; i++)
     {
         var segments = judgeL2A(poly, [lineData.angle, lines[i]]);
@@ -204,7 +204,7 @@ function eachVena(poly, lineData)
     return areaLines;
 }
 
-//ÇóËãËùÓĞ¶à±ßĞÎµÄÎÆÀíÏß¶Î
+//æ±‚ç®—æ‰€æœ‰å¤šè¾¹å½¢çš„çº¹ç†çº¿æ®µ
 function allAreaLines(polys, lineData)
 {
     var exPoly = new Array();
@@ -216,17 +216,17 @@ function allAreaLines(polys, lineData)
 
 
 /**********************
- * »æÖÆËùÓĞÍ¼ĞÎºÍÎÆÀí
+ * ç»˜åˆ¶æ‰€æœ‰å›¾å½¢å’Œçº¹ç†
  *********************/
-//ÕÒµ½ËùÓĞÍ¼ĞÎµÄ±ß½ç
+//æ‰¾åˆ°æ‰€æœ‰å›¾å½¢çš„è¾¹ç•Œ
 function findBorder(pointArray)
 {
     var maxX = -Infinity, maxY = -Infinity, minX = Infinity, minY = Infinity; 
-    //±éÀúËùÓĞ¶à±ßĞÎ
+    //éå†æ‰€æœ‰å¤šè¾¹å½¢
     for (var i = 1; i <= pointArray[0]; i++)
     {
         var pointNum = pointArray[i].length
-        //±éÀúÒ»¸ö¶à±ßĞÎµÄËùÓĞµã
+        //éå†ä¸€ä¸ªå¤šè¾¹å½¢çš„æ‰€æœ‰ç‚¹
         for (var j = 0; j < pointNum; j++)
         {
             var corX = pointArray[i][j][0], corY = pointArray[i][j][1];
@@ -238,18 +238,18 @@ function findBorder(pointArray)
     }
     return [minX, maxX, minY, maxY];
 }
-//¸ù¾İµ±Ç°ÎÄ¼şÊıÉèÖÃÎÆÀí»æÖÆÊı¾İ
+//æ ¹æ®å½“å‰æ–‡ä»¶æ•°è®¾ç½®çº¹ç†ç»˜åˆ¶æ•°æ®
 function setStyle(dScale, drawSign)
 {
-    if (drawSign == 0)      //»æÖÆÆ½ĞĞÏßÎÆÀí
+    if (drawSign == 0)      //ç»˜åˆ¶å¹³è¡Œçº¿çº¹ç†
         return {veinData:{interval:4, angle:1}, lineColor:'black' ,lineQuality: 1/dScale};
-    else                    //»æÖÆµãÍ¼ÏñÌî³äÎÆÀí
+    else                    //ç»˜åˆ¶ç‚¹å›¾åƒå¡«å……çº¹ç†
         return {veinData:{interval:3, angle:0.0001}, lineColor:'green', radis: 2/dScale};
 }
-//»æÖÆµ¥¸öÃæµÄ±ß½ç
+//ç»˜åˆ¶å•ä¸ªé¢çš„è¾¹ç•Œ
 function drawPoly(poly, pCanvas)
 {
-    //ÕÒµ½¿ªÊ¼¼ÇÂ¼Êı¾İµÄÏÂ±ê
+    //æ‰¾åˆ°å¼€å§‹è®°å½•æ•°æ®çš„ä¸‹æ ‡
     var pointNum = poly.length;
     pCanvas.beginPath();
     pCanvas.moveTo(poly[0][0], poly[0][1]);
@@ -260,43 +260,43 @@ function drawPoly(poly, pCanvas)
 
     return ;
 }
-//»æÖÆ¾ØĞÎµã×´Îï
+//ç»˜åˆ¶çŸ©å½¢ç‚¹çŠ¶ç‰©
 function drawPoint(point, pInterval, pCanvas)
 {
-    point[1] =point[1] - pInterval/2;        //ÖØĞÂÉèÖÃÎ»ÖÃ
+    point[1] =point[1] - pInterval/2;        //é‡æ–°è®¾ç½®ä½ç½®
     var interval = pInterval / 8;
-    //»æÖÆÎÆÀíºÚÉ«²¿·Ö
+    //ç»˜åˆ¶çº¹ç†é»‘è‰²éƒ¨åˆ†
     pCanvas.fillStyle = "black";                       
-    //pCanvas.fillRect(point[0] - 7*interval, point[1] +  7*interval, 2*interval, 2*interval);                //Ìî³ä¾ØĞÎ
-    //»æÖÆÂÌÉ«²¿·Ö
+    //pCanvas.fillRect(point[0] - 7*interval, point[1] +  7*interval, 2*interval, 2*interval);                //å¡«å……çŸ©å½¢
+    //ç»˜åˆ¶ç»¿è‰²éƒ¨åˆ†
     pCanvas.fillStyle = "green";                       
-    pCanvas.fillRect(point[0] - 4*interval, point[1] + 3*interval, interval, interval);                //Ìî³ä¾ØĞÎ
-    pCanvas.fillRect(point[0] - 3*interval, point[1] + 2*interval, 2*interval, interval);                //Ìî³ä¾ØĞÎ
-    pCanvas.fillRect(point[0] - interval, point[1] + 3*interval, interval, interval);                //Ìî³ä¾ØĞÎ
+    pCanvas.fillRect(point[0] - 4*interval, point[1] + 3*interval, interval, interval);                //å¡«å……çŸ©å½¢
+    pCanvas.fillRect(point[0] - 3*interval, point[1] + 2*interval, 2*interval, interval);                //å¡«å……çŸ©å½¢
+    pCanvas.fillRect(point[0] - interval, point[1] + 3*interval, interval, interval);                //å¡«å……çŸ©å½¢
 }
-//·Ö¸îÏß¶Î£¬·µ»ØµÄÎ»ÖÃÎª»æÖÆÍ¼ĞÎµÄÓÒÏÂ½Ç
+//åˆ†å‰²çº¿æ®µï¼Œè¿”å›çš„ä½ç½®ä¸ºç»˜åˆ¶å›¾å½¢çš„å³ä¸‹è§’
 function cutLine(line, pInterval)
 {
-    //³õÊ¼»¯µãÊı×é
+    //åˆå§‹åŒ–ç‚¹æ•°ç»„
     var points = new Array();
-    //ÇóËãÏß¶Î³¤¶È
+    //æ±‚ç®—çº¿æ®µé•¿åº¦
     var lineLen = Math.sqrt(Math.pow(line[0][0] - line[1][0], 2) + Math.pow(line[0][1] - line[1][1], 2));
-    //Ïß¶ÎÉÏĞèÒª»æÖÆµÄµãÊı
+    //çº¿æ®µä¸Šéœ€è¦ç»˜åˆ¶çš„ç‚¹æ•°
     var pointNum = parseInt(lineLen/pInterval);
-    //½«µã¼ÓÈëµãÊı×é£¬²¢·µ»ØÊı×é
+    //å°†ç‚¹åŠ å…¥ç‚¹æ•°ç»„ï¼Œå¹¶è¿”å›æ•°ç»„
     for (var i = 1; i <= pointNum; i++)
         points.push([line[0][0] + pInterval*i, line[0][1]]);
     
     return points;
 }
-//»æÖÆµ¥¸öÎÆÀíÏß¶Î
+//ç»˜åˆ¶å•ä¸ªçº¹ç†çº¿æ®µ
 function drawEachLine(line, pCanvas, drawData, drawSign)
 {
     var lineData = drawData.veinData;
-    if (drawSign == 0)  //»æÖÆÆ½ĞĞÏßÎÆÀí
+    if (drawSign == 0)  //ç»˜åˆ¶å¹³è¡Œçº¿çº¹ç†
     {
-        pCanvas.lineWidth = lineData.lineQuality;                   //ÉèÖÃÏß¿í
-        pCanvas.strokeStyle = drawData.lineColor;                   //ÉèÖÃÏßÉ«
+        pCanvas.lineWidth = lineData.lineQuality;                   //è®¾ç½®çº¿å®½
+        pCanvas.strokeStyle = drawData.lineColor;                   //è®¾ç½®çº¿è‰²
         pCanvas.beginPath();
         pCanvas.moveTo(line[0][0], line[0][1]);
         pCanvas.lineTo(line[1][0], line[1][1]);
@@ -305,102 +305,102 @@ function drawEachLine(line, pCanvas, drawData, drawSign)
     }
     if (drawSign == 1)
     {
-        //»ñµÃ»æÖÆµÄµãÊı¾İ
-        var pInterval = drawData.veinData.interval;     //µã¼ä¸ô
+        //è·å¾—ç»˜åˆ¶çš„ç‚¹æ•°æ®
+        var pInterval = drawData.veinData.interval;     //ç‚¹é—´éš”
         var pointArray = cutLine(line, pInterval);
         var pointNum = pointArray.length;
-        //Ñ­»·£¬»æÖÆËùÓĞµã
+        //å¾ªç¯ï¼Œç»˜åˆ¶æ‰€æœ‰ç‚¹
         for (var i = 0; i < pointNum; i++)
             drawPoint(pointArray[i], pInterval, pCanvas);
     }
 
 }
-//»æÖÆµ¥¸öÍ¼ĞÎµÄÎÆÀí
+//ç»˜åˆ¶å•ä¸ªå›¾å½¢çš„çº¹ç†
 function drawVein(veins, pCanvas, drawData, drawSign)
 {
-    //»ñµÃÎÆÀíÌõÊı
+    //è·å¾—çº¹ç†æ¡æ•°
     var lineNum = veins.length;
     for (var i = 0; i < lineNum; i++)
         drawEachLine(veins[i], pCanvas, drawData, drawSign);
 }
 
-//»æÖÆÍ¼ĞÎÊı×éºÍ»æÖÆÑùÊ½»æÖÆ
+//ç»˜åˆ¶å›¾å½¢æ•°ç»„å’Œç»˜åˆ¶æ ·å¼ç»˜åˆ¶
 function draw(polyArray)
 {
-    var corPolyArray = polyArray[layerNum - 1];         //»ñµÃµ±Ç°µØÍ¼
-    var drawDiv, canvas;         //¶¨Òådiv£¬canvas
-    //ÕÒµ½µ±Ç°µØÍ¼ËùÓĞµØÎïµÄ±ß½ç£¬²¢¼ÓÔØµ½È«¾Ö±äÁ¿ÖĞ¼ÇÂ¼ÏÂÀ´
+    var corPolyArray = polyArray[layerNum - 1];         //è·å¾—å½“å‰åœ°å›¾
+    var drawDiv, canvas;         //å®šä¹‰divï¼Œcanvas
+    //æ‰¾åˆ°å½“å‰åœ°å›¾æ‰€æœ‰åœ°ç‰©çš„è¾¹ç•Œï¼Œå¹¶åŠ è½½åˆ°å…¨å±€å˜é‡ä¸­è®°å½•ä¸‹æ¥
     var border = findBorder(corPolyArray);
     var dataWidth = border[1] - border[0], dataHeight = border[3] - border[2];
-    if (layerNum == 1)      //µÚÒ»´Î¼ÓÔØµØÍ¼£¬´´½¨DivºÍcanvas
+    if (layerNum == 1)      //ç¬¬ä¸€æ¬¡åŠ è½½åœ°å›¾ï¼Œåˆ›å»ºDivå’Œcanvas
     {
-        WAL = [border[0], border[2], dataWidth, dataHeight];          //¼ÇÂ¼µ±Ç°µØÍ¼·¶Î§
-        //´´½¨div£¬²¢¼ÓÈëÍøÒ³ÖĞ
+        WAL = [border[0], border[2], dataWidth, dataHeight];          //è®°å½•å½“å‰åœ°å›¾èŒƒå›´
+        //åˆ›å»ºdivï¼Œå¹¶åŠ å…¥ç½‘é¡µä¸­
         drawDiv = document.createElement("div")
         drawDiv.id = "drawDiv";
         document.getElementById("container").appendChild(drawDiv);
-        //´´½¨»­²¼²¢¼ÓÈëµ½div
+        //åˆ›å»ºç”»å¸ƒå¹¶åŠ å…¥åˆ°div
         canvas = document.createElement("canvas");
         canvas.id = "myCanvas";
-        drawDiv.appendChild(canvas);        //¼ÓÈëµ½divÖĞ
+        drawDiv.appendChild(canvas);        //åŠ å…¥åˆ°divä¸­
     }
-    else                    //²»ÊÇµÚÒ»´Î¼ÓÔØµØÍ¼£¬ĞŞ¸ÄDivºÍcanvasµÄ¿í¸ß
+    else                    //ä¸æ˜¯ç¬¬ä¸€æ¬¡åŠ è½½åœ°å›¾ï¼Œä¿®æ”¹Divå’Œcanvasçš„å®½é«˜
     {
-        //»ñµÃdivºÍcanvas
+        //è·å¾—divå’Œcanvas
         drawDiv = document.getElementById("drawDiv");
         canvas = document.getElementById("myCanvas");
-        //È·¶¨µ±Ç°µØÍ¼µÄ³¤¿íÓëÖ®Ç°µÄ¹ØÏµ£¬È·¶¨×îÖÕ³¤¿í£¬²¢¼ÇÂ¼
+        //ç¡®å®šå½“å‰åœ°å›¾çš„é•¿å®½ä¸ä¹‹å‰çš„å…³ç³»ï¼Œç¡®å®šæœ€ç»ˆé•¿å®½ï¼Œå¹¶è®°å½•
         dataWidth = WAL[2] < dataWidth? dataWidth: WAL[2];
         dataHeight = WAL[3] < dataHeight? dataHeight: WAL[3];
-        //ÖØĞÂÈ·¶¨ÆğÊ¼Î»ÖÃ
+        //é‡æ–°ç¡®å®šèµ·å§‹ä½ç½®
         border[0] = WAL[0] < border[0]? WAL[0]: border[0];
         border[2] = WAL[1] < border[2]? WAL[1]: border[2];
         WAL = [border[0], border[2], dataWidth, dataHeight];
     }
-    //ÉèÖÃdivµÄ¸ß¶È
+    //è®¾ç½®divçš„é«˜åº¦
     drawDiv.style.height = dataHeight * (drawDiv.offsetWidth / dataWidth) + "px";
-    //ÉèÖÃcanvas³¤¿í
+    //è®¾ç½®canvasé•¿å®½
     canvas.width = drawDiv.offsetWidth, canvas.height = drawDiv.offsetHeight
-    //»ñµÃ»æÖÆ¾ä±ú
+    //è·å¾—ç»˜åˆ¶å¥æŸ„
     var drawCanvas = canvas.getContext("2d");
-    //»ñµÃ»æÖÆ±ÈÀı³ß
+    //è·å¾—ç»˜åˆ¶æ¯”ä¾‹å°º
     var scale = (canvas.width - 20) / dataWidth;
-    //ËõĞ¡»­²¼±ÈÀı³ß£¬²¢·­×ª»­²¼£¬Ê¹×ø±êÔ­µãÎ»ÓÚ»­²¼×óÏÂ½Ç£¬²¢Óë±ß½çÉÏÏÂÁô³ö¼ä¸ô
+    //ç¼©å°ç”»å¸ƒæ¯”ä¾‹å°ºï¼Œå¹¶ç¿»è½¬ç”»å¸ƒï¼Œä½¿åæ ‡åŸç‚¹ä½äºç”»å¸ƒå·¦ä¸‹è§’ï¼Œå¹¶ä¸è¾¹ç•Œä¸Šä¸‹ç•™å‡ºé—´éš”
     drawCanvas.translate(10, canvas.height * (1 - 10/canvas.width));
     drawCanvas.scale(scale, -scale);
-    //ÒÆ¶¯×ø±êÏµ£¬Ê¹»æÖÆ´Ó×îĞ¡Öµ¿ªÊ¼
+    //ç§»åŠ¨åæ ‡ç³»ï¼Œä½¿ç»˜åˆ¶ä»æœ€å°å€¼å¼€å§‹
     drawCanvas.translate(-border[0], -border[2]);          
-    //ÒÀ´Î»æÖÆËùÓĞÍ¼²ã
+    //ä¾æ¬¡ç»˜åˆ¶æ‰€æœ‰å›¾å±‚
     for (var i = 0; i < layerNum; i++)
     {
-        corPolyArray = polyArray[i];        //»ñµÃÍ¼²ãÊı¾İ
-        var drawSign = corPolyArray[corPolyArray.length - 1];  //»ñµÃµ±Ç°ÎÆÀí»æÖÆ±êÖ¾
-        //»ñµÃ¸ù¾İµ±Ç°ÎÄ¼şÊıÉèÖÃÎÆÀí»æÖÆÊı¾İ
+        corPolyArray = polyArray[i];        //è·å¾—å›¾å±‚æ•°æ®
+        var drawSign = corPolyArray[corPolyArray.length - 1];  //è·å¾—å½“å‰çº¹ç†ç»˜åˆ¶æ ‡å¿—
+        //è·å¾—æ ¹æ®å½“å‰æ–‡ä»¶æ•°è®¾ç½®çº¹ç†ç»˜åˆ¶æ•°æ®
         var drawStyle = setStyle(scale, drawSign);
-        drawCanvas.strokeStyle = drawStyle.lineColor;       //ÉèÖÃ±ß½çÏßÉ«
-        drawCanvas.lineWidth = 1 / scale;                   //ÉèÖÃ±ß½çÏß¿í
+        drawCanvas.strokeStyle = drawStyle.lineColor;       //è®¾ç½®è¾¹ç•Œçº¿è‰²
+        drawCanvas.lineWidth = 1 / scale;                   //è®¾ç½®è¾¹ç•Œçº¿å®½
 
-        //»æÖÆËùÓĞ±ÕºÏÇúÏß±ß½ç
+        //ç»˜åˆ¶æ‰€æœ‰é—­åˆæ›²çº¿è¾¹ç•Œ
         for (var j = 1; j <= corPolyArray[0]; j++)
             drawPoly(corPolyArray[j], drawCanvas)
 
-        //»æÖÆÎÆÀí
-        var exPolys = allAreaLines(corPolyArray, drawStyle.veinData);        //»ñµÃµÄÎÆÀí»æÖÆÊı¾İ
+        //ç»˜åˆ¶çº¹ç†
+        var exPolys = allAreaLines(corPolyArray, drawStyle.veinData);        //è·å¾—çš„çº¹ç†ç»˜åˆ¶æ•°æ®
         for (var j = 1; j <= exPolys[0]; j++)
             drawVein(exPolys[j], drawCanvas, drawStyle, drawSign);
     }   
 
 }
 
-//½«´ÓÍøÒ³ÖĞ¶ÁÈ¡µÄ×Ö·û´®×ª»»ÎªÊı×éĞÎÊ½
+//å°†ä»ç½‘é¡µä¸­è¯»å–çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ•°ç»„å½¢å¼
 function polyStr2polyXY(polyStr)
 {
-    var lineNum = 1, pointNum = 0;        //¼ÇÂ¼ÒÑ¾­¶ÁÈ¡ĞĞÊı¡¢µ±Ç°ÏßµãÊı
+    var lineNum = 1, pointNum = 0;        //è®°å½•å·²ç»è¯»å–è¡Œæ•°ã€å½“å‰çº¿ç‚¹æ•°
     var polyXY = new Array();  
-    var strs = polyStr.split("\n");     //ÉèÖÃ·Ö¸î
+    var strs = polyStr.split("\n");     //è®¾ç½®åˆ†å‰²
     for (var i = 0; i <= strs.length ;i++)
     {
-        if( i == 0)   //ÎªµÚÒ»ÌõÏßÔö¼Ó´æ´¢¿Õ¼ä
+        if( i == 0)   //ä¸ºç¬¬ä¸€æ¡çº¿å¢åŠ å­˜å‚¨ç©ºé—´
         {
             polyXY[lineNum] = new Array();
             i++;
@@ -409,52 +409,47 @@ function polyStr2polyXY(polyStr)
         {
             if(strs[i+1].indexOf("END") >= 0)    
             {
-                polyXY[0] = lineNum;            //¼ÇÂ¼×ÜÏß¶ÎµÄÌõÊı
+                polyXY[0] = lineNum;            //è®°å½•æ€»çº¿æ®µçš„æ¡æ•°
                 return polyXY;
             }
-            else                                //µ±Ç°Ïß¶Î½áÊø
+            else                                //å½“å‰çº¿æ®µç»“æŸ
             {
-                polyXY[++lineNum] = new Array(); //ÎªÏÂÒ»ÌõÏß·ÖÅä¿Õ¼ä
+                polyXY[++lineNum] = new Array(); //ä¸ºä¸‹ä¸€æ¡çº¿åˆ†é…ç©ºé—´
                 i += 2;
-                pointNum = 0;                   //µ±Ç°Ïß¶ÎµãÊı¼ÇÂ¼¹éÁã
+                pointNum = 0;                   //å½“å‰çº¿æ®µç‚¹æ•°è®°å½•å½’é›¶
             }
         }
 
-        //½«¸Ãµã¼ÇÂ¼½øÈëÊı×é
+        //å°†è¯¥ç‚¹è®°å½•è¿›å…¥æ•°ç»„
         var XY = strs[i].split(',');
         polyXY[lineNum][pointNum] = new Array(2);     
         polyXY[lineNum][pointNum][0] = parseFloat(XY[0]);
         polyXY[lineNum][pointNum++][1] = parseFloat(XY[1]);
     }//for
 }
-//ÅĞ¶Ï¶ÁÈ¡µÄÎÄ¼ş£¬ÉèÖÃÎÆÀí»æÖÆ±êÖ¾
+//åˆ¤æ–­è¯»å–çš„æ–‡ä»¶ï¼Œè®¾ç½®çº¹ç†ç»˜åˆ¶æ ‡å¿—
 function setDrawSign(fileName)
 {
     if (fileName == 'Building.gen')     return 0;
     else if (fileName == 'vegrgn.gen')  return 1;
     else
-        document.write("ÎÄ¼şÃû´íÎó");
+        document.write("æ–‡ä»¶åé”™è¯¯");
 }
-//¶ÁÈ¡ÎÄ¼ş²¢²¢½øĞĞÏà¹Ø²Ù×÷
+//è¯»å–æ–‡ä»¶å¹¶å¹¶è¿›è¡Œç›¸å…³æ“ä½œ
 function readMapFile()
 {  
-    var polyFile = document.getElementById("openMapFile").files[0];  //»ñÈ¡ÎÄ¼ş
+    var polyFile = document.getElementById("openMapFile").files[0];  //è·å–æ–‡ä»¶
     var reader = new FileReader();  
     reader.readAsText(polyFile);  
     reader.onload=function(e)
     {
-        polyArray[layerNum] = polyStr2polyXY(this.result);      //½«¶ÁÈ¡µÄÊı¾İ×ª»»Îª×Ö·û´®ĞÎÊ½
-        polyArray[layerNum++].push(setDrawSign(polyFile.name))  //Ã¿¸öÍ¼²ãµÄÊı×é×îºóÒ»Î»·ÅÖÃÎÆÀí»æÖÆ±êÖ¾
-        draw(polyArray);                                        //»æÖÆÍ¼²ã
-        //var exPolys = allAreaLines(polyArray[drawSign++]);        //»ñµÃµÄÎÆÀí»æÖÆÊı¾İµÄ¶à±ßĞÎÊı¾İ
+        polyArray[layerNum] = polyStr2polyXY(this.result);      //å°†è¯»å–çš„æ•°æ®è½¬æ¢ä¸ºå­—ç¬¦ä¸²å½¢å¼
+        polyArray[layerNum++].push(setDrawSign(polyFile.name))  //æ¯ä¸ªå›¾å±‚çš„æ•°ç»„æœ€åä¸€ä½æ”¾ç½®çº¹ç†ç»˜åˆ¶æ ‡å¿—
+        draw(polyArray);                                        //ç»˜åˆ¶å›¾å±‚
+        //var exPolys = allAreaLines(polyArray[drawSign++]);        //è·å¾—çš„çº¹ç†ç»˜åˆ¶æ•°æ®çš„å¤šè¾¹å½¢æ•°æ®
     }
 }
-//console.log(acLines([0,10,0,10], Math.sqrt(2),1));
-//console.log(judgeL2L([1, [0,0]], [[0,1],[2,1]]))
-//console.log(judgeL2A(setPoly(), [1, [0,0]]));
-//console.log(findAreaBorder(setPoly()));
-//var lineData = {interval:Math.sqrt(2)/4, angle:1};
-//eachVena(setPoly(), lineData)
+
 </script>
     </body>
 </html>
